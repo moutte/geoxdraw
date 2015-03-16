@@ -1,0 +1,288 @@
+# GeoXDraw : Software tools for processing geochemical data #
+author: J.Moutte, Ecole des Mines de Saint Etienne, moutte@emse.fr
+
+GeoXDraw (formerly Tikazu) is a Windows95+ (95/98/2000...) program for geochemical data processing. Its main purpose is to help the interpretation of bulk and mineral chemistry data through graphic representations.
+
+You may download the program from http://www.emse.fr/~moutte/geoxdraw_.zip (or geoxdraw _.exe , 'self-extractable')._
+
+## Installation ##
+
+Download the file geoxdraw_.zip (395 K) and decompress into a given directory (e.g. c:\geoxdraw). That will create the program geoxdraw.exe, and the text files needed for configuration (_log.txt, _spiders.txt), test (_colsym.txt and _xy.txt) and postscript exportation. This 'geoxdraw directory' can be any directory for which you have writing rights. Temporary files and results of drawing and conversions will be written within this directory.
+Obective_
+
+The objective of GeoXDraw is to include most basic tools specific to geochemical data handling. For more general tasks (edit, sort, select,...), the user will rely on more common softwares (one for spreadsheet and one for publishing the drawings produced by GeoXDraw as postscript files).
+
+GeoXDraw is not so complete as other softwares for geochemical data processing (for example it does not include ready-made geochemical diagrams with already defined fields for reference series), but it is compact (about 600 kbytes, in a single .EXE file, without calls to external DLL files), and easy to install (simply decompress the zip file into a directory) and uninstall (simply delete this directory).
+
+Working directly by copy/paste to/from the Windows clipboard, GeoXDraw has a direct 'interface' with standard spreadsheet software, and does not need to import/export to a specific format. In order to allow many different 'projections' from different points of view, the input file can include up to eight descriptive fields that are used to define the selections (to plot or not), and the colors and shapes of the symbols. GeoXDraw can work on one single input file for X-Y-(Z), or with two input files, one for X (- Z), the other for Y, or with two input files, one for sample list and the other for data.
+GeoXDraw: detailed description
+
+Compared with graphing tools generally included in standard spreadsheet software, our program's drawback is that it is not integrated to the spreadsheet itself, but, as it reads and writes a format readily supported by spreadsheets, the time spent in switching between applications should be short compared to the time saved in using tools specially designed for geochemical data.
+Configuration
+
+GeoXDraw, developed with the Delphi IDE, is running under Windows95 or higher. Any configuration that can run Win95+ should run GeoXDraw. [Linux version should soon become available, as Kylix ('Delphi for Linux') is now available as Open Edition](A.md).
+
+The program is directly downloadable from our web site. Decompressing the file GeoXDraw.zip (about 300 K) into a given directory (e.g. c:\GeoXDraw) will create the program GeoXDraw.exe, and related text files for configuration (_log.txt,_spiders.txt), for test (_colsym.sav and_xy.sav ), and a postscript header file necessary for exporting the diagrams as postscript files.
+
+It has been developed for a 800x600 display or higher resolution. It can be used under a lower resolution, but the interface will not be displayed entirely with the diagram on a single screen. The default size of the diagram is 530 by 530 pixels. It can be enlarged by passing a higher resolution as a parameter in the _log.txt file: this file contains the line RES=530, just replace the 530 by the resolution you want._
+
+As the program is relatively small, it is possible to have several instances of the program running parallely (and at the same time as the spreadsheet program), for example for comparative work on different databases. In that case, to avoid confusion between the output files of the different instances, you should have different copies of the whole GeoXDraw directory with distinct names, for example GeoXDraw1, GeoXDraw2, etc. and the plot files will be saved in the respective sub-directories GeoXDraw1\PS, GeoXDraw2\PS, etc.
+## Launching the program ##
+
+The only menu item available on start deals with the input file(s): File / Input data
+
+The difference with input of Tikazu (former name of GeoXDraw) is that the data are input directly from the Windows clipboard.
+
+The 'strategy' is as follows
+  * 1: open your data file with your favorite spreadsheet program (e.g. OpenOffice, Quattro, Excel, ...),
+  * 2: select a block of data that includes, as the first line of the block, the descriptive fields;
+  * 3: copy to the clipboard;
+  * 4: switch to GeoXDraw, choose 'Input Data' and the input mode you want (cf. infra);
+that will open a window where you can Paste the clipboard into and save as Single File, or Data File or List File.
+
+The first step is thus within your spreadsheet, where you select the block, with the descriptive line at the top:
+
+
+
+The second step is to switch to GeoXDraw, File > Input Data>Single File will open the Import Window where you paste (in the present case) and save as single file:
+
+The program can work with
+  * either one single input file for X-Y-Z, (File > InputData > Single File)
+  * or with two input files, (File > InputData > List/Data Files)
+  * one with the sample descriptions and data for X-axis, (and Z data of ternary diagrams),
+  * the other with data for the Y-axis (convenient input mode for comparison of data obtained from different methods, e.g. XRF and ICP)
+  * or with two input files, (File > InputData > Separate X Y Files)
+  * <> one with the sample descriptions,
+  * <> the other with data for X-Y-(Z) data.
+
+In the case of two input files, the program must find where a given sample is located in each file. Ths, **the two input files must have the sample identifier as the first field** (= first column) of each file. This is easily done with any spreadsheet software.
+
+The distribution includes two sample data files that can be used to test the program and help the user get acquainted with the input format and the different features of the program. These files (_colsym.sav containing a sample list,_xy.sav corresponding analytical data) are loaded by the File / Test instruction.
+File / Reload
+
+  * this will open again, as input, the files that you were working on the last time you used GeoXDraw.
+
+#### File / Test ####
+Will load the two test files (_colsym.sav containing a sample list,_xy.sav corresponding analytical data).
+
+Once the input files have been read, other menu items become available: Diagrams, and Conversion.
+
+### Structure of the data files ###
+
+GeoXDraw reads text files of the so-called TAB delimited format (= the different fields of a record are separated by Tabulation characters), but that property of the input is 'transparent' to the user, as this format is the default format for a 'text image' of a spreadsheet; GeoXDraw input files are thus 'automatically' generated by the Copy > Paste procedure of the operating system.
+
+The structure of an input file obeys simple rules:
+
+  * Each 'record' (i.e. one whole rock sample, or one microprobe point) is written on one line.
+  * Each record (e.g. each analysis) consists of two types of variables :
+> > -:- string values describing the sample (name, lithology, location, magmatic unit, point number for a probe analysis, etc.),
+> > -:- numerical values giving the chemical compositions, or any quantifiable parameter.
+
+### basic principle of the input format ###
+  * all descriptive string values must be placed ahead (i.e. on the left side of the spreadsheet) of the numerical parameters.
+  * One field entry cannot contain blank characters, because they would be considered as field separators. !!! [have more than one word in one field, you may use the underline character '\_' ](to.md).
+  * For character strings describing the sample, only the first 7 characters are significant; notice also that GeoXDraw is not case sensitive.
+
+Then, the program must be able to know what is what:
+
+_The first line of the input data block must contain the informations that describe the structure and type of content of the data set._
+It contains the names of the variables, and their types (whether descriptive or numerical), as defined by a simple rule:
+_The name of a descriptive string parameter (not the values themselves) must have a point '.' as leading character._
+
+A typical head line will thus appear like the first line in the following block of data:
+
+In this example, the first three fields (named SAMP, CS, GRAD) will contain string values (sample name, code for color/symbol, grade), and the following fields numeric values (contents in LoI, SiO2, TiO2, Al2O3, etc.).
+
+The labels of the latter have thus no '.' as leading character .
+
+[from former versions: It is possible, not necessary, to have a title line: just add it as a single line at the top of the the file, and take care that it has no '.' character at the beginning: this will 'tell ' the program that it is a title and that the label line will come in second](restite.md).
+
+### Graphic functions (submenu Diagrams) ###
+
+The following types of graphic output are available
+binary diagrams, multielement profiles, ternary diagrams, spidergrams , histograms.
+
+They are accessed through the menu items Diagram>X-Y Draw, Diagram>Triangle, Diagram>Histogram, Diagram>Spiderman,...
+Checkbox Atom
+
+In all cases except spidergrams, the user can switch to the 'atomic mode': the input data, supposed to be originally in weight % (if element name is given as oxide) or in ppm of metal (if element name is given as element), are converted to numbers of atom grams for 1000 g of rock.
+
+To switch/ unswitch a given axis or apex for atomic, check/ uncheck the corresponding 'Atom' check box.
+
+### Checkbox **Complex** ###
+
+Expressions of the form (aX+bY+...)/(cM+dN+...), [X,Y,M,N are oxides, metals, or atom numbers, and a,b,c,d,.. are coefficients](where.md) can be constructed checking the 'Complex' check box, and using the 'Reset', 'Plus' and 'Minus' buttons, combined with the 'Numerator/Denominator' switch.
+
+To begin enter an expression, check the Reset button and choose the element in the lists for X, Y (Z), then check the Plus or Minus to add or subtract other elements.
+
+To reset an expression, check the Complex button to off.
+
+At the moment, only simple expressions can be entered: the coefficients a, b, c, ... can be only 1 or -1 (for example, to enter Al - 2Ca, enter Al - Ca - Ca ; for more complex expressions, like Ca - 5/3 P, convert the input into atomic numbers, open the resultant image file as a sheet of the current book of the spreadsheet, calculate the expression with your spreadsheet, and reread the modified atomic file).
+Hint
+
+An alternative, for rocks with excess apatite, to convert CaO wt% directly to CaO**= 'excess CaO' (i.e. CaO in other minerals), is to calculate, directly in the oxide wt% sheet, a new column with CaO** = CaO - P2O5 **568/432.**
+
+When working with single term expressions on ternary diagrams, it is possible to affect coefficients to the apices of ternary diagrams .
+Profile diagram
+
+With one element for X-axis, plot the variations of several elements along Y-axis.
+
+#### Options ####
+  * check the Profile check box: connect the points of each series of Y-variables,
+  * check the Max = 100 check box: norm to 100 the maximum value of each series: .
+Histograms
+
+Visualize the distribution of a given parameter (e.g. SiO2 content).
+
+Draw a single histogram for the complete data set, or compare the distributions in different rock types, using several histograms. The field according to which the different populations are distinguished, is selected by Selection>Select Series.
+
+The distribution of the selected parameter can be computed in normal or in logarithmic scale: checking the Log check box means that you plot, in normal scale, the distribution of the logarithms of the values (... and not the normal distribution plotted on a logarithmic scale).
+
+### Spidergrams ###
+
+The parameters of the spidergram (element list and corresponding normalisation parameters) are read from a text file, named _spiders.txt, which is (must be) in the same directory as the program iself._spiders.txt contains data for a number of 'standard' spidergrams (e.g. REE list / chondrite normalisation).
+
+By editing this file as a spreadsheet (e.g. 'Open With > Excel') or in a simple ascii editor (e.g. notepad, editpad), the user can modify the element list and parameters, and add or delete some of the normalisations, using the same format as used for the existing normalisations. When using a spreadsheet program for the edition of _spiders.txt, remember to save the file using the 'Save As Text File' with tabs as separator._
+
+This format is similar to that of other input files; each normalisation is defined by a set of 3 lines:
+  * 1st: name of normalisation> (e.g. authors, reference)
+  * 2nd: field name 
+
+&lt;tab&gt;
+
+ element list (element names separated by 
+
+&lt;tab&gt;
+
+'s);
+  * 3rd: name of normalizing material (e.g. Chondrite, Shale, ...) 
+
+&lt;tab&gt;
+
+ normalisation factors (separated by 
+
+&lt;tab&gt;
+
+'s ).
+
+NB: The file _spiders.txt comprises an 'end of input' line, which begins with a '§' or '!'. The 3-lines format should be strictly observed until this line.
+Selections : Colors, Symbols, Labels, Series ..._
+
+According to the type of diagram selected in the Diagrams menu, different types of selections become available in the Selection menu.
+:-: for binary, ternary, and spider diagrams: Color - Symbol - Label - Series,
+:-: for Profiles and Histograms: Series.
+
+Each time you select an item in the Selection menu, a box with the list of the different values (= names) of the descriptive fields of the input file is activated. You will select in this list which field is used to define the value of the corresponding item (e.g. Color/Symbol, Label, Series, ...).
+Label
+
+To select which field is used as label of a point on a diagram, or as the name of a spidergram. The default value for the label selection is the first field of the record (= first column of sheet).
+Select Series
+
+When **Select Series** is selected in the **Selection menu**, you can choose, in the list that appears under 'SELECTION', one of the available desciptive fields. Upon selecting one of these, a list of the possible values will be displayed, where you can check/ uncheck the different groups of points that you want to be taken into account in the currently active drawing task.
+
+When drawing binary or ternary diagrams, 'Select Series' can be used to draw separate diagrams for different sample groups from a large database. For example, the different diagrams can be saved as PostScript files which will be imported, using your technical drawing software, into different superposed layers.
+
+When drawing **histograms**, 'Select Series' is used to draw one histogram for each Series (up to eight series).
+### Symbols, Colors, or Color/Symbol ###
+
+For the definition of Symbols, Colors, or Color/Symbol combination, a dedicated column must have been inserted in beforehand in the input file , in the descriptive part).
+
+For example, given a column containing lithologic data, it will be a quick and simple task to insert (preferably on its left side) a new column, and, using the sorting, filling or pasting functions that most spreadsheet include, to fill it with Color and/or Symbol codes corresponding to the different lithologies encountered in the data file. This new column should be given a name, on the first line, beginning with a '.' (for example '.Symbol').
+
+Although this edition of the input file takes some time, this approach has the major advantage of the 'stabilization' of the symbolics of the data set. In other words, when using a given database at some time intervals, the same correspondance between sample characteristics and Colors/ Symbols will be found from one drawing session to the other.
+#### Color definition syntax ####
+
+The **color** _is defined by one letter_; 8 colors are available; the letters B, R, G, Y, L, V, T, O corresponds to Black, Red, Green, Yellow, bLue, V iolet, Turquoise, Orange ('true' orange will appear in the PostScript, not on screen).
+Symbol definition syntax
+
+A **symbol** _is defined by two letters_,
+  * the first letter gives the shape (Square, Circle, Plus, Diamond, Xross, ...),
+  * the second letter gives the 'character': Empty, Filled, Plus, Circle, Xross.
+
+Each shape, encoded by the first lettre, can be affected by five different 'characters'; for example, a Square, when Filled, is encoded as SF, an empty circle as CE (Circle / Empty), etc.
+
+However, as this mnemomic way of coding could not be applied to all symbols, the best way to know which 2-lettres combinations are 'legal' is to have the symbols shown on screen by executing File > Show Symbols/Colors,.
+Color+Symbol combination
+
+Color + Symbol can be combined in a single field (i.e. a column within the 'descriptive' part of the input file). A colored symbol is defined by a word of 3 letters, the color code being the first letter, and the symbol the two others.
+
+Example: a sample having RCF as the value of the corresponding '.ColSym' field will plot as a Red Circle Filled ...
+Captions of Color/Symbol
+
+It is useful that the diagram (and its PostScript image) displays a caption with the 'meaning' of the different colors / symbols. GeoXDraw considers that these are contained in the field (= column) just next to the field containing the encoding. In other words, the column containing the symbolics encoding will be be inserted on the left side of the column it is constructed from.
+Gray Scale PostScript output
+
+While the diagram on screen always use 'true colors', its PostScript image may have the colors converted to different values of grayscale. This option is selected by checking the 'Gray Scale' checkbox in the 'Output Selection' windows that is shown when executing Selections > Output Selections.
+Other functions
+
+Besides graphic tools, GeoXDraw can operate basic operation of unit conversions.
+
+### Nota Bene ###
+
+The program 'understands' that the input data are either
+  * in weight percent of oxide if the field label is written as an oxide (e.g. SiO2)
+  * in ppm of metal if the field label is written as an element, e.g. Sr.
+Conversions
+
+  * from ppm to oxides (useful for unusual rocks, such as ores, where so called trace elements become major elements ...);
+  * from oxides to ppm (e.g. for mixing EPMA data [accessory minerals](of.md), generally given as oxides, with whole rock data);
+  * from oxides and ppm to numbers of atoms for 1000 grams of rock.
+
+Each conversion will produce an 'image' of the input file, i.e. a file with the same structure, that is saved in the directory [GeoXDraw](GeoXDraw.md)\DAT, where [GeoXDraw](GeoXDraw.md) stands for the name of the directory that contains GeoXDraw.exe. The three conversions mentioned above will produce respectively the files PPM.txt, OXY.txt, ATM.txt.
+
+Whenever a new file is converted, the former image file, for example PPM.txt, is overwritten by the image of the new file ... Thus, before proceding to a new file, the image text files should be opened (with a simple ascii editor or directly by the spreadsheet program) and their content saved under a new name.
+
+## Computing structural formulas ##
+
+One of the conversion tools is a basic module for computation of structural formulas from weight % data.
+
+This tool implements the classical calculation scheme based on a given total number of valencies. More specific calculations (e.g. calculate a mica without taking K-Na-Ca in account ...) can be done with a spreadsheet on the output file produced by the program.
+
+This tool appears in the Conversion menu only if the input file has a descriptive field, named .MINERAL, containing the names of the minerals. These mineral names will be used to select the number of oxygens for formula calculation of each analysis. This allows an input file to contain several types of minerals with different calculation schemes.
+
+Mineral names recognized by the programs are generally full names, with the first five letters recognized as significant, such as biotite, muscovite, olivine, pyrochlore, pyroxene, hornblende, etc.
+
+Minerals not recognized by the program will be calculated with the default value of the number of oxygen, i.e. 24.
+
+The following minerals are currently implemented:
+
+biotite, muscovite, chlorite, amphibole, hornblende, cordierite, felspar, feldspar, plagioclase, kfelspar, cpx, opx, pyroxene, olivine, garnet, grenat, sphene, apatite, epidote, sillimanite, andalusite , spinel, magnetit, aegirine, humite, perovskite , pyrochlore.
+
+The numbers of oxygen are as follows :
+
+Micas, Chlorite : 11; Amphibole : 23; Cordierite : 18; Felspars : 8; Pyroxene : 6;
+Olivine, Spinels : 4; Sphene, Humite : 5; Garnet : 12; Apatite : 24; Epidote : 25;
+sillimanite et al : 5;
+
+The results are saved in the same manner as other files produced by the conversion tools, i.e. in a specific directory named [GeoXDraw](GeoXDraw.md)\DAT\STC.
+
+All minerals contained in the input file are saved in a single file, with number of cations recalculated according to the number of valencies corresponding to each type of mineral.
+
+In the case of an input file containing analyses of micas, garnets, pyroxenes, amphiboles, or pyrochlore the program will also produce special files which have a format specific to these minerals. These specific files will be saved, under the same directory [GeoXDraw](GeoXDraw.md)\DAT\STC, with a specific suffix (.MIC, .GAR, .PXN, .AMP, .PYR).
+Saving the diagrams for post processing
+
+A click on the SAVE box, which becomes visible when a diagram has been displayed, saves the current diagram as a PostScript file; the SAVE box becomes invisible after the diagram has been saved.
+
+PostScript (a Page Description Language, with strong graphic capabilities, developed to drive laser printers) is recognized by most software for technical drawing (e.g. iGrafx Designer [Corel Designer](now.md), Canvas, ...). [files may be also directly included in a LaTeX file](Postscript.md). Postscript files are compact and the language is 'vectorial', which means that a diagram is 'described' by the PostScript text as a sequence of geometric objects corresponding to the axes, labels, symbols, etc.
+
+In order to build the PostScript 'image' of the diagram, GeoXDraw looks for a PostScript file, with suffix .ps, that should be in the same directory as the GeoXDraw.exe file. This file contains a 'header', that is copied at the beginning of each PostScript 'image file', and that contains the 'implementations' of symbols and colors. It is thus possible for the user with only basic notions of the postscript language to modify permanently the colors and the 'look' of the symbols by modifying this GeoXDraw.ps file.
+Where are my diagrams ...?
+
+The PostScript text files are saved in the subdirectory PS of the of the GeoXDraw directory, i.e. in [GeoXDraw](GeoXDraw.md)\PS\.
+
+The name of the 'image file' of a given diagram consists of a number, incremented from 01 to 99 for a given drawing session, followed by the names of the X, Y (and Z) elements : for example, a diagram of TiO2 vs. MgO, if it is the first one saved in the current GeoXDraw session, 01TiMg.ps; it will be distinguished from another TiO2-MgO diagram through the order number. Diagrams of other types are given specific names (e.g. 03SPD.ps if the 3d diagram of a session is a spidergram ...).
+
+Actually, for each 'image file' saved, two more files, besides the main diagram file 0NXY.ps, are created (in the case you have chosen a layout of 1 diagram per page !!! otherwise, all diagrams are mute) :
+-:- the main file, for example 01TiMg.ps, is the image of the diagram on the screen, i.e. with scales, symbols, colors, but without the labels of the points;
+-:- a file named lab\_01TiMg.ps contains only the labels, and a frame that will be used to 'superpose' this label file with the master one;
+-:- a file named leg\_01TiMg.ps contains captions.
+
+To process the diagrams, it is very useful to use a graphic software that can draw on multiple layers: the different files of a given diagram will be imported into different layers of the same page. For example, the file 01TIMG.ps is imported, then lab\_01TIMG.ps is imported on a distinct layer, and only selected labels can be cut and pasted from this layer to the main layer. The different diagrams, when imported, comprise small line segments, on lower left and upper right corners, that will be used for exact superposition of the layers.
+Viewing PostScript Files
+
+Ghostscript, Ghostview and GSview are Freely available from
+http://www.cs.wisc.edu/~ghost/
+Editing PostScript Files
+
+Detailed description of the PostScript language can be found at many sites on the web, for example at
+http://www.adobe.com/products/postscript/
